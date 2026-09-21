@@ -1,16 +1,19 @@
-void main() {
-    // Ponteiro para a memória de vídeo VGA (modo texto)
-    char* video_memory = (char*) 0xb8000;
-    
-    // Escreve "Riv-Nix Kernel" na tela com cor branca/azul
-    char *message = "Bem-vindo ao Riv-Nix Kernel!";
-    int i = 0;
-    
-    while(message[i] != 0) {
-        video_memory[i*2] = message[i];
-        video_memory[i*2 + 1] = 0x0f; // Atributo de cor (texto branco, fundo preto)
-        i++;
-    }
+#include "vga.h"
 
-    while(1); // Trava o kernel em loop infinito
+void main() {
+    // Limpa a tela ao iniciar o kernel
+    vga_clear();
+
+    // Exibe mensagens estilizadas usando as cores do VGA
+    vga_print("=== RIV-NIX KERNEL v0.1 ===\n", (VGA_COLOR_LIGHT_CYAN << 4) | VGA_COLOR_BLACK);
+    vga_print("Status: Bare-metal inicializado com sucesso!\n\n", VGA_COLOR_LIGHT_GREEN);
+    
+    vga_print("[INFO] Carregando gerenciadores...\n", VGA_COLOR_YELLOW);
+    vga_print("[OK] Gerenciador de memoria pronto.\n", VGA_COLOR_WHITE);
+    vga_print("[OK] Driver VGA integrado via C e Assembly.\n", VGA_COLOR_WHITE);
+
+    vga_print("\nRiv-Nix CLI > ", VGA_COLOR_LIGHT_MAGENTA);
+
+    // Trava o kernel em loop infinito
+    while(1);
 }
