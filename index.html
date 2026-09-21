@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Riv-Nix Kernel - v86</title>
+    <style>
+        body { background: #111; color: #fff; font-family: monospace; text-align: center; margin-top: 50px; }
+        #screen_container { width: 640px; height: 400px; margin: 0 auto; background: #000; border: 2px solid #444; }
+    </style>
+</head>
+<body>
+    <h1>Riv-Nix Kernel no Navegador</h1>
+    <p>A correr através do emulador v86 (WebAssembly)</p>
+    
+    <div id="screen_container">
+        <div style="white-space: pre; font: 14px monospace; line-height: 14px"></div>
+    </div>
+
+    <!-- Importa a biblioteca do v86 direto do GitHub oficial -->
+    <script src="https://cdn.jsdelivr.net/gh/copy/v86@master/build/libv86.js"></script>
+    <script>
+        window.onload = function() {
+            var emulator = new V86Starter({
+                wasm_path: "https://cdn.jsdelivr.net/gh/copy/v86@master/build/v86.wasm",
+                memory_size: 32 * 1024 * 1024,
+                vga_memory_size: 2 * 1024 * 1024,
+                screen_container: document.getElementById("screen_container"),
+                // Coloca o teu os-image.bin na mesma pasta do index.html ou aponta para ele
+                hda: { url: "os-image.bin" },
+                autostart: true,
+            });
+        };
+    </script>
+</body>
+</html>
