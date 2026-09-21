@@ -1,0 +1,24 @@
+name: Compilar Kernel
+
+on:
+  push:
+    branches: [ main, master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Copiar código do repositório
+        uses: actions/checkout@v3
+
+      - name: Instalar dependências (GCC, NASM, Make)
+        run: sudo apt-get update && sudo apt-get install -y build-essential nasm
+
+      - name: Compilar o Kernel
+        run: make
+
+      - name: Guardar a imagem de disco gerada
+        uses: actions/upload-artifact@v3
+        with:
+          name: os-image
+          path: os-image.bin
