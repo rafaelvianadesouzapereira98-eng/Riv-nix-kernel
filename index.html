@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Riv-Nix Kernel - v86</title>
+    <title>Riv-Nix Kernel - Bootsector</title>
     <style>
         body { background: #111; color: #fff; font-family: monospace; text-align: center; margin-top: 30px; }
         #screen_container { width: 640px; height: 400px; margin: 0 auto; background: #000; border: 2px solid #444; position: relative; }
@@ -10,39 +10,40 @@
     </style>
 </head>
 <body>
-    <h1>Riv-Nix Kernel no Navegador</h1>
-    <p>A correr através do emulador v86 (WebAssembly)</p>
+    <h1>Riv-Nix Kernel - 512 Bytes Boot</h1>
+    <p>A executar o setor de arranque cru via v86</p>
     
     <div id="screen_container">
         <div style="white-space: pre; font: 14px monospace; line-height: 14px"></div>
     </div>
-    <div id="loading">A carregar o emulador e a imagem do sistema...</div>
+    <div id="loading">A carregar o emulador...</div>
 
-    <!-- Carrega a biblioteca localmente -->
-    <script src="libv86.js"></script>
+    <!-- Utilizando a CDN do jsDelivr recomendada para a versão estável do v86 -->
+    <script src="https://cdn.jsdelivr.net/npm/v86@latest/build/libv86.js"></script>
     <script>
         window.onload = function() {
             const statusDiv = document.getElementById("loading");
             
             if (typeof V86Starter === "undefined") {
                 statusDiv.style.color = "#f00";
-                statusDiv.innerText = "Erro: libv86.js local não foi encontrado ou carregado.";
+                statusDiv.innerText = "Erro: A biblioteca libv86.js não pôde ser carregada.";
                 return;
             }
 
             try {
                 var emulator = new V86Starter({
-                    wasm_path: "v86.wasm",
+                    wasm_path: "https://cdn.jsdelivr.net/npm/v86@latest/build/v86.wasm",
                     memory_size: 32 * 1024 * 1024,
                     vga_memory_size: 2 * 1024 * 1024,
                     screen_container: document.getElementById("screen_container"),
-                    hda: { url: "os-image.bin" },
+                    // Usamos 'fda' (floppy disk) em vez de 'hda', ideal para binários de 512 bytes
+                    fda: { url: "os-image.bin" },
                     autostart: true,
                 });
 
                 emulator.add_listener("load", function() {
                     statusDiv.style.color = "#0f0";
-                    statusDiv.innerText = "Emulador iniciado com sucesso!";
+                    statusDiv.innerText = "Bootsector executado com sucesso!";
                 });
 
             } catch (err) {
