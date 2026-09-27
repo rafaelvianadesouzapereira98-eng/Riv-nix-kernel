@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <title>Riv-Nix Kernel - v86</title>
     <style>
-        body { background: #111; color: #fff; font-family: monospace; text-align: center; margin-top: 50px; }
-        #screen_container { width: 640px; height: 400px; margin: 0 auto; background: #000; border: 2px solid #444; }
+        body { background: #111; color: #fff; font-family: monospace; text-align: center; margin-top: 30px; }
+        #screen_container { width: 640px; height: 400px; margin: 0 auto; background: #000; border: 2px solid #444; position: relative; }
+        #loading { margin-top: 10px; color: #ff0; font-size: 14px; }
     </style>
 </head>
 <body>
@@ -15,20 +16,34 @@
     <div id="screen_container">
         <div style="white-space: pre; font: 14px monospace; line-height: 14px"></div>
     </div>
+    <div id="loading">A carregar o emulador e a imagem do sistema...</div>
 
     <!-- Importa a biblioteca do v86 direto do GitHub oficial -->
     <script src="https://cdn.jsdelivr.net/gh/copy/v86@master/build/libv86.js"></script>
     <script>
         window.onload = function() {
-            var emulator = new V86Starter({
-                wasm_path: "https://cdn.jsdelivr.net/gh/copy/v86@master/build/v86.wasm",
-                memory_size: 32 * 1024 * 1024,
-                vga_memory_size: 2 * 1024 * 1024,
-                screen_container: document.getElementById("screen_container"),
-                // Coloca o teu os-image.bin na mesma pasta do index.html ou aponta para ele
-                hda: { url: "os-image.bin" },
-                autostart: true,
-            });
+            const statusDiv = document.getElementById("loading");
+            
+            try {
+                var emulator = new V86Starter({
+                    wasm_path: "https://cdn.jsdelivr.net/gh/copy/v86@master/build/v86.wasm",
+                    memory_size: 32 * 1024 * 1024,
+                    vga_memory_size: 2 * 1024 * 1024,
+                    screen_container: document.getElementById("screen_container"),
+                    hda: { url: "os-image.bin" },
+                    autostart: true,
+                });
+
+                emulator.add_listener("load", function() {
+                    statusDiv.style.color = "#0f0";
+                    statusDiv.innerText = "Emulador iniciado com sucesso!";
+                });
+
+            } catch (err) {
+                statusDiv.style.color = "#f00";
+                statusDiv.innerText = "Erro ao iniciar: " + err.message;
+                console.error(err);
+            }
         };
     </script>
 </body>
