@@ -18,22 +18,21 @@
     </div>
     <div id="loading">A carregar o emulador e a imagem do sistema...</div>
 
-    <!-- Usando o unpkg que costuma ser mais estável para carregar bibliotecas do npm -->
-    <script src="https://unpkg.com/v86@latest/build/libv86.js"></script>
+    <!-- Carrega a biblioteca localmente -->
+    <script src="libv86.js"></script>
     <script>
         window.onload = function() {
             const statusDiv = document.getElementById("loading");
             
-            // Verifica se a biblioteca carregou antes de chamar
             if (typeof V86Starter === "undefined") {
                 statusDiv.style.color = "#f00";
-                statusDiv.innerText = "Erro: A biblioteca libv86.js não pôde ser carregada.";
+                statusDiv.innerText = "Erro: libv86.js local não foi encontrado ou carregado.";
                 return;
             }
 
             try {
                 var emulator = new V86Starter({
-                    wasm_path: "https://unpkg.com/v86@latest/build/v86.wasm",
+                    wasm_path: "v86.wasm",
                     memory_size: 32 * 1024 * 1024,
                     vga_memory_size: 2 * 1024 * 1024,
                     screen_container: document.getElementById("screen_container"),
