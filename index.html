@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Riv-Nix Kernel - Bootsector</title>
+    <title>Riv-Nix Kernel - 16 to 32 bit</title>
     <style>
         body { background: #111; color: #fff; font-family: monospace; text-align: center; margin-top: 30px; }
         #screen_container { width: 640px; height: 400px; margin: 0 auto; background: #000; border: 2px solid #444; position: relative; }
@@ -10,15 +10,15 @@
     </style>
 </head>
 <body>
-    <h1>Riv-Nix Kernel - 512 Bytes Boot</h1>
-    <p>A executar o setor de arranque cru via v86</p>
+    <h1>Riv-Nix Kernel (16-bit to 32-bit)</h1>
+    <p>A executar transição de modo real para modo protegido via v86</p>
     
     <div id="screen_container">
         <div style="white-space: pre; font: 14px monospace; line-height: 14px"></div>
     </div>
-    <div id="loading">A carregar o emulador...</div>
+    <div id="loading">A carregar o kernel...</div>
 
-    <!-- Utilizando a CDN do jsDelivr recomendada para a versão estável do v86 -->
+    <!-- CDN oficial e estável do v86 -->
     <script src="https://cdn.jsdelivr.net/npm/v86@latest/build/libv86.js"></script>
     <script>
         window.onload = function() {
@@ -36,14 +36,14 @@
                     memory_size: 32 * 1024 * 1024,
                     vga_memory_size: 2 * 1024 * 1024,
                     screen_container: document.getElementById("screen_container"),
-                    // Usamos 'fda' (floppy disk) em vez de 'hda', ideal para binários de 512 bytes
+                    // 'fda' garante que o BIOS execute o setor de boot de 16-bit inicial
                     fda: { url: "os-image.bin" },
                     autostart: true,
                 });
 
                 emulator.add_listener("load", function() {
                     statusDiv.style.color = "#0f0";
-                    statusDiv.innerText = "Bootsector executado com sucesso!";
+                    statusDiv.innerText = "Kernel em execução (16-bit -> 32-bit)!";
                 });
 
             } catch (err) {
