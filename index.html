@@ -1,57 +1,38 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Riv-Nix Kernel - 16 to 32 bit</title>
+    <title>Web Kernel Emulator</title>
     <style>
-        body { background: #111; color: #fff; font-family: monospace; text-align: center; margin-top: 30px; }
-        #screen_container { width: 640px; height: 400px; margin: 0 auto; background: #000; border: 2px solid #444; position: relative; }
-        #loading { margin-top: 10px; color: #ff0; font-size: 14px; }
+        body {
+            background-color: #121212;
+            color: #00ff00;
+            font-family: monospace;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        canvas {
+            border: 4px solid #333;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);
+            background: #000;
+        }
+        input {
+            margin-top: 15px;
+            color: #fff;
+        }
     </style>
 </head>
 <body>
-    <h1>Riv-Nix Kernel (16-bit to 32-bit)</h1>
-    <p>A executar transição de modo real para modo protegido via v86</p>
-    
-    <div id="screen_container">
-        <div style="white-space: pre; font: 14px monospace; line-height: 14px"></div>
-    </div>
-    <div id="loading">A carregar o kernel...</div>
+    <h1>Web Kernel Renderer</h1>
+    <canvas id="screen" width="720" height="400"></canvas>
+    <input type="file" id="kernelFile" accept=".bin">
 
-    <!-- CDN oficial e estável do v86 -->
-    <script src="https://cdn.jsdelivr.net/npm/v86@latest/build/libv86.js"></script>
-    <script>
-        window.onload = function() {
-            const statusDiv = document.getElementById("loading");
-            
-            if (typeof V86Starter === "undefined") {
-                statusDiv.style.color = "#f00";
-                statusDiv.innerText = "Erro: A biblioteca libv86.js não pôde ser carregada.";
-                return;
-            }
-
-            try {
-                var emulator = new V86Starter({
-                    wasm_path: "https://cdn.jsdelivr.net/npm/v86@latest/build/v86.wasm",
-                    memory_size: 32 * 1024 * 1024,
-                    vga_memory_size: 2 * 1024 * 1024,
-                    screen_container: document.getElementById("screen_container"),
-                    // 'fda' garante que o BIOS execute o setor de boot de 16-bit inicial
-                    fda: { url: "os-image.bin" },
-                    autostart: true,
-                });
-
-                emulator.add_listener("load", function() {
-                    statusDiv.style.color = "#0f0";
-                    statusDiv.innerText = "Kernel em execução (16-bit -> 32-bit)!";
-                });
-
-            } catch (err) {
-                statusDiv.style.color = "#f00";
-                statusDiv.innerText = "Erro ao iniciar: " + err.message;
-                console.error(err);
-            }
-        };
-    </script>
+    <script src="vm.js"></script>
+    <script src="vga.js"></script>
+    <script src="main.js"></script>
 </body>
 </html>
