@@ -20,19 +20,27 @@
             box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);
             background: #000;
         }
-        input {
+        #console {
+            width: 720px;
+            height: 100px;
+            background: #000;
+            border: 2px solid #550000;
+            color: #ff5555;
+            padding: 10px;
             margin-top: 15px;
-            color: #fff;
+            overflow-y: auto;
+            font-size: 12px;
+            white-space: pre-wrap;
         }
     </style>
 </head>
 <body>
     <h1>Web Kernel Renderer</h1>
     <canvas id="screen" width="720" height="400"></canvas>
-    <input type="file" id="kernelFile" accept=".bin">
+    <div id="console">[Sistema] Aguardando carregamento do kernel...</div>
 
-    <script src="vm.js"></script>
-    <script src="vga.js"></script>
-    <script src="main.js"></script>
+    <script src="build/vm.js"></script>
+    <script src="build/vga.js"></script>
+    <script src="build/main.js"></script>
 </body>
 </html>
